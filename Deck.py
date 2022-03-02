@@ -15,7 +15,7 @@ class Deck:
         print("######################## Shuffling Cards!! #########################")
         self.count_card.reset()
         for nod in range(self.num_of_deck):
-            for i in range(1, 14):  # 1 2 3 45 6 7 8 9 10 11 12 13
+            for i in range(1, 14):
                 for j in range(4):
                     self.cards.append(Card(i, j))
 
