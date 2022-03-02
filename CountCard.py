@@ -1,4 +1,4 @@
-class CountCards:
+class CountCard:
 	def __init__(self,running_count=0,true_count=0):
 		self.running_count = running_count
 		self.true_count = true_count
@@ -9,8 +9,3 @@ class CountCards:
 	def reset(self):
 		self.running_count = 0
 		self.true_count = 0
-
-if __name__ == "__main__":
-	c = CountCards(true_count=14)
-
-	print(c.true_count)

@@ -1,5 +1,4 @@
 class Card:
-
 	def __init__(self,value,suit):
 		card_list = [None,'A',2,3,4,5,6,7,8,9,10,'J','Q','K']
 		self.value = card_list[value]
@@ -10,8 +9,6 @@ class Card:
 	def cal_card_price(self):
 		if self.value == 'A':
 			return 11
-		# if self.value == 'J' or self.value == 'Q' or self.value == 'K':
-		# 	return 10 
 		if self.value in ['J','Q','K']:
 			return 10
 		if self.value >= 2 and self.value<=10:
@@ -24,12 +21,3 @@ class Card:
 			return -1
 		else:
 			return 0
-
-
-
-
-if __name__ == '__main__':
-	c1 = Card(8,1)
-
-
-	print("Value",c1.value,"Price",c1.price,"count",c1.count)

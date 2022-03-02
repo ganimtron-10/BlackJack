@@ -1,5 +1,5 @@
-from Cards import Card
-from CountingCards import CountCards
+from Card import Card
+from CountCard import CountCard
 
 import random
 
@@ -7,7 +7,7 @@ class Deck:
 	def __init__(self,num_of_deck=4):
 		self.num_of_deck = num_of_deck
 		self.cards = []
-		self.count_card = CountCards()
+		self.count_card = CountCard()
 		self.generate_cards()
 
 	def generate_cards(self):
@@ -30,8 +30,3 @@ class Deck:
 
 	def num_of_deck_remaining(self):
 		return len(self.cards)/52
-					
-
-if __name__ == "__main__":
-	d1 = Deck()
-	print(d1.draw_card(2))

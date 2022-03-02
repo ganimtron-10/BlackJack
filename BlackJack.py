@@ -1,10 +1,11 @@
+from Card import Card
 from Deck import Deck
 from Player import Player
-from BasicStratergy import BasicStrategy, BasicStrategy_with_PlayerDeviation
+from BasicStrategy import BasicStrategy, BasicStrategy_with_PlayerDeviation
 
 
-class Blackjack:
-    def __init__(self, g_min_bet, num_of_deck, num_of_deck_before_s, bankroll_value_list, num_of_players=1, basic_strategy=True):
+class BlackJack:
+    def __init__(self, g_min_bet, num_of_deck, num_of_deck_before_s, can_dealer_hit_on_soft, bankroll_value_list, num_of_players=1, basic_strategy=True):
         self.deck = Deck(num_of_deck)
         self.dealer = Player(True, self.deck, self)
         self.player_list = []
@@ -13,6 +14,7 @@ class Blackjack:
         self.create_players(num_of_players, bankroll_value_list)
         self.current_player_list = []
         self.basic_strategy = basic_strategy
+        self.can_dealer_hit_on_soft = can_dealer_hit_on_soft
 
     def create_players(self, num_of_players, bankroll_value_list):
         for i in range(num_of_players):
@@ -55,10 +57,8 @@ class Blackjack:
             player.can_dd = True
             player.bankroll_value_list.append(player.bankroll)
 
-
         self.dealer.reveal_cards = False
         self.current_player_list = []
-
 
         for i in range(len(self.player_list)):
             self.player_list[i].player_index = str(i+1)
@@ -82,32 +82,46 @@ class Blackjack:
                                                                                           # self.deck.count_card.true_count))
             print(f"""Enter for Player {current_player.player_index} \nS for Stand\nH for Hit\nD for Double Dowm\nSP for Split\n----> :""")
 
-
             if self.basic_strategy:
-            	print("\nStrategy: ",BasicStrategy().choose_move(current_player.score,
+                print("\nStrategy: ", BasicStrategy().choose_move(current_player.score,
                                                               self.dealer.cards[0].price,
                                                               current_player.is_pair,
                                                               current_player.is_soft,
                                                               player_card_score,
                                                               len(current_player.cards)))
-            	choice = BasicStrategy().choose_move(current_player.score,
-                                                  self.dealer.cards[0].price, 
-                                                  current_player.is_pair, 
+                print((current_player.score,
+                      self.dealer.cards[0].price,
+                      current_player.is_pair,
+                      current_player.is_soft,
+                      player_card_score,
+                      len(current_player.cards)))
+                choice=BasicStrategy().choose_move(current_player.score,
+                                                  self.dealer.cards[0].price,
+                                                  current_player.is_pair,
                                                   current_player.is_soft,
                                                   player_card_score,
                                                   len(current_player.cards))
             else:
-            	print("\nStrategy: ",
+                print("\nStrategy: ",
                   BasicStrategy_with_PlayerDeviation().choose_move_with_player_deviation(current_player.score,
                                                                                           self.dealer.cards[0].price,
                                                                                           current_player.is_pair,
                                                                                           current_player.is_soft,
                                                                                           player_card_score,
-                                                                                          len(current_player.cards),
+                                                                                          len(
+                                                                                              current_player.cards),
                                                                                           self.deck.count_card.true_count))
-            	choice = BasicStrategy_with_PlayerDeviation().choose_move_with_player_deviation(current_player.score,
-                                                          self.dealer.cards[0].price, current_player.is_pair, current_player.is_soft, player_card_score,
-                                                          len(current_player.cards),self.deck.count_card.true_count)
+                print((current_player.score,
+                      self.dealer.cards[0].price,
+                      current_player.is_pair,
+                      current_player.is_soft,
+                      player_card_score,
+                      len(current_player.cards),
+                      self.deck.count_card.true_count))
+                choice=BasicStrategy_with_PlayerDeviation().choose_move_with_player_deviation(current_player.score,
+                                                          self.dealer.cards[
+                                                              0].price, current_player.is_pair, current_player.is_soft, player_card_score,
+                                                          len(current_player.cards), self.deck.count_card.true_count)
 
             # choice = input()
 
@@ -115,7 +129,7 @@ class Blackjack:
                                                          # self.dealer.cards[0].price, current_player.is_pair, current_player.is_soft, player_card_score)
 
             if choice == 'H':
-                p_bust = current_player.hit()
+                p_bust=current_player.hit()
                 current_player.show_cards()
 
                 if p_bust == -1:
@@ -127,7 +141,7 @@ class Blackjack:
                     return None
 
             if choice == 'D':
-                p_bust = current_player.double_down()
+                p_bust=current_player.double_down()
                 current_player.show_cards()
                 if p_bust == -1:
                   break
@@ -135,16 +149,19 @@ class Blackjack:
                     print(f"Player {current_player.player_index} has Busted!!")
                     current_player.update_bankroll_value(-1)
                     return None
-                choice = 'S'
+                choice='S'
 
             if choice == 'SP':
-                split_player = current_player.split()
+                split_player=current_player.split()
                 # self.current_player_list.insert(i+1, split_player)
-                does_split_player_exits = self.ask_player_choice(
+                does_split_player_exits=self.ask_player_choice(
                     split_player, dealer_status)
                 if does_split_player_exits != None:
                     self.current_player_list.append(does_split_player_exits)
 
+            if choice == -1:
+                print("Some thing error caused!")
+                break
         return current_player
 
     def play_round(self):
@@ -156,15 +173,15 @@ class Blackjack:
             player.update_bet()
             print(f"Player {player.player_index} is betting {player.current_bet}")
 
-        self.current_player_list = self.player_list.copy()
+        self.current_player_list=self.player_list.copy()
 
-        dealer_status = self.dealer.deal()
+        dealer_status=self.dealer.deal()
         self.dealer.show_cards()
 
-        player_bj = []
+        player_bj=[]
 
         for i in range(len(self.player_list)):
-            current_player = self.player_list[i]
+            current_player=self.player_list[i]
             player_bj.append(current_player.deal())
             current_player.show_cards()
 
@@ -174,11 +191,11 @@ class Blackjack:
         if dealer_status:
             print("Dealer Has A BlackJack!!")
             for i in range(len(self.player_list)):
-                current_player = self.player_list[i]
+                current_player=self.player_list[i]
 
                 if current_player.has_insurance:
-                	print("Insurance Money Won!!")
-                	current_player.update_bankroll_value(1)
+                    print("Insurance Money Won!!")
+                    current_player.update_bankroll_value(1)
                 elif player_bj[i]:
                     print("Player Also Has A BlackJack!! PUSH!!")
                 else:
@@ -186,40 +203,42 @@ class Blackjack:
             return self.deck.count_card.true_count
         else:
             for i in range(len(self.player_list)):
-	            current_player = self.player_list[i]
+                current_player=self.player_list[i]
 
-	            if player_bj[i] == 1:
-	            	print(f"Player {current_player.player_index} has a Blackjack!!")
-	            	current_player.update_bankroll_value(1.5)
-	            	self.current_player_list[i] = None
+                if player_bj[i] == 1:
+                    print(f"Player {current_player.player_index} has a Blackjack!!")
+                    current_player.update_bankroll_value(1.5)
+                    self.current_player_list[i]=None
 
-	            if current_player.has_insurance:
-	            	print("Insurance Money Lost!")
-	            	current_player.update_bankroll_value(-0.5)
+                if current_player.has_insurance:
+                    print("Insurance Money Lost!")
+                    current_player.update_bankroll_value(-0.5)
 
         for i in range(len(self.current_player_list)):
 
             if self.current_player_list[i] == None:
                 continue
 
-            self.current_player_list[i] = self.ask_player_choice(
+            self.current_player_list[i]=self.ask_player_choice(
                 self.current_player_list[i], dealer_status)
 
-        self.dealer.reveal_cards = True
+        self.dealer.reveal_cards=True
         self.dealer.show_cards()
 
 
-        player_exits = False
+        player_exits=False
         for player in self.current_player_list:
           if player != None:
-            player_exits = True
-          
+            player_exits=True
+
         if not player_exits:
           return self.deck.count_card.true_count
 
 
         while self.dealer.score < 17:
-            d_bust_value = self.dealer.hit()
+            if self.dealer.is_soft and not self.can_dealer_hit_on_soft:
+                break
+            d_bust_value=self.dealer.hit()
             self.dealer.show_cards()
             if d_bust_value == 0:
                 print("Dealer Busted!")
@@ -250,42 +269,77 @@ class Blackjack:
         return self.deck.count_card.true_count
 
     def ask_for_insurance(self):
-    	if self.basic_strategy == False:
-	        for i in range(len(self.player_list)):
-	            current_player = self.player_list[i]
-	            print("Strategy: ", BasicStrategy_with_PlayerDeviation(
-	            ).take_insurance(self.deck.count_card.true_count))
+        if self.basic_strategy == False:
+            for i in range(len(self.player_list)):
+                current_player=self.player_list[i]
+                print("Strategy: ", BasicStrategy_with_PlayerDeviation(
+                ).take_insurance(self.deck.count_card.true_count))
 
-	            print(
-	                f"Enter for Player {current_player.player_index}\nWhether you wanna take the insurance: ")
+                print(
+                    f"Enter for Player {current_player.player_index}\nWhether you wanna take the insurance: ")
 
-	            # choice = input()
+                # choice = input()
 
-	            choice = BasicStrategy_with_PlayerDeviation().take_insurance(self.deck.count_card.true_count)
+                choice=BasicStrategy_with_PlayerDeviation().take_insurance(
+                    self.deck.count_card.true_count)
 
-	            if choice == 'I':
-	                print(f"Player {current_player.player_index} took Insurance!")
-	                current_player.has_insurance = True
+                if choice == 'I':
+                    print(f"Player {current_player.player_index} took Insurance!")
+                    current_player.has_insurance=True
 
 
-# if __name__ == '__main__':
-    # b = Blackjack(25, 6, 1.5, [1000,1000], num_of_players=2, basic_strategy = False)
-    # b.play_n_rounds(100)
+if __name__ == '__main__':
+    b=BlackJack(25, 6, 1.5, False, [1000],
+                num_of_players=1, basic_strategy=True)
+    b.play_n_rounds(10000)
+
     # player = b.player_list[0]
 
-    # b.player_list[0].cards.extend([Card(7,0), Card(3,1)])
-    # b.player_list[0].cal_score()
+    # player.cards.extend([Card(3,0), Card(3,1)])
+    # player.cal_score()
 
 
-    # b.dealer.cards.extend([Card(5,0), Card(3,1)])
+    # b.dealer.cards.extend([Card(4,0), Card(7,1)])
     # b.dealer.cal_score()
-    # b.player_list[0].current_bet = 50
+    # player.current_bet = 10
 
 
     # b.dealer.show_cards()
+    # player.show_cards()
+
+    # player.can_hit = True
+    # player.can_dd = True
+    # player_copy = copy.deepcopy(player)
+
+    # player_copy.cards = [player.cards.pop()]
+    # player_copy.parent = player
+    # player_copy.is_derivate = True
+
+    # player_copy.player_index += '.1'
+    # player.player_index += '.2'
+
+    # parent_bust = player.hit()
+    # player_copy.hit()
+
+    # if player_copy.cards[0].value == 'A':
+    #     player.can_hit = False
+    #     player_copy.can_hit = False
+
+    # player_copy.show_cards()
+    # player.show_cards()
+
+
+
+
+
+
+
+    # b.player_list[0].cards.extend([Card(1,2)])
+    # b.player_list[0].cal_score()
     # b.player_list[0].show_cards()
 
-    # b.ask_player_choice(b.player_list[0],0)
+    # print(b.player_list[0].is_pair)
+    # print(b.ask_player_choice(b.player_list[0],0))
 
     # b.dealer.reveal_cards = True
     # b.dealer.show_cards()

@@ -52,7 +52,7 @@ class BasicStrategy:
 		# print(player_card,dealer_card,is_pair,is_soft)
 		if is_pair:
 			return self.choose_from_pair_cards(player_pair_value,dealer_card,player_card,num_of_p_cards)
-		elif is_soft:
+		elif is_soft and player_card < 11:
 			return self.choose_from_soft_cards(player_card, dealer_card,num_of_p_cards)
 		else:
 			return self.choose_from_hard_cards(player_card, dealer_card,num_of_p_cards)
@@ -65,6 +65,8 @@ class BasicStrategy:
 			return self.choose_from_hard_cards(player_total_score,d_c,num_of_p_cards)
 
 	def choose_from_soft_cards(self,p_c,d_c,num_of_p_cards):
+		while p_c > 11:
+			p_c -= 10
 		choice = self.soft_card[p_c][d_c]
 		if choice == 'DH' or choice == 'DS':
 			if num_of_p_cards == 2:
@@ -147,42 +149,3 @@ class BasicStrategy_with_PlayerDeviation(BasicStrategy):
 			return 'I'
 		else:
 			return 'NI'
-
-
-
-
-if __name__ == '__main__':
-	bs_pd = BasicStrategy_with_PlayerDeviation()
-	choice = bs_pd.choose_move_with_player_deviation(10,11,False,False,10,3,3.0)
-	print(choice)
-
-	print(bs_pd.take_insurance(-2.0))
-
-	
-
-	# pd = bs_pd.pd_cards
-
-	# for i in range(len(pd)):
-	# 	for j in range(len(pd[0])):
-	# 		pd[i][j] = -1
-
-
-	# pd[9][2] = 'D 1'
-	# pd[9][7] = 'D 3'
-	# pd[10][11] = 'D 4'
-	# pd[10][5] = 'SP 5'
-	# pd[10][6] = 'SP 4'
-	# pd[10][10] = 'D 4'
-	# pd[11][11] = 'D 1'
-	# pd[12][2] = 'S 3'
-	# pd[12][3] = 'S 2'
-	# pd[12][4] = 'SH 0'
-	# pd[12][5] = 'SH -2'
-	# pd[12][6] = 'SH -1'
-	# pd[13][2] = 'SH -1'
-	# pd[13][3] = 'SH -2'
-	# pd[15][10] = 'S 4'
-	# pd[16][9] = 'S 5'
-	# pd[16][10] = 'S 0'
-
-	# print(pd)

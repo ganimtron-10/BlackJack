@@ -78,8 +78,18 @@ class Player:
 		player_copy = copy.deepcopy(self)
 
 		player_copy.cards = [self.cards.pop()]
-		player_copy.parent = self
+
+		current_parent = self
+		while current_parent.is_derivate:
+			if current_parent.parent != None:
+				current_parent = current_parent.parent
+			else:
+				break
+		player_copy.parent = current_parent
+
 		player_copy.is_derivate = True
+
+		
 
 		player_copy.player_index += '.1'
 		self.player_index += '.2'
@@ -139,7 +149,7 @@ class Player:
 			score += card.price
 
 		while ace_counter > 0 and score > 21:
-			is_soft = True
+			self.is_soft = True
 			score -= 10
 			ace_counter -= 1
 

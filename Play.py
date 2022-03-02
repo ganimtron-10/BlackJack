@@ -1,4 +1,4 @@
-from BlackJack import Blackjack
+from BlackJack import BlackJack
 
 # import matplotlib.pyplot as plt
 
@@ -20,6 +20,13 @@ if game_type == 'y' or game_type == 'Y':
 else:
 	game_type = True
 
+can_dealer_hit_on_soft = input("Can Dealer hit on soft 17(y/n): ")
+
+if can_dealer_hit_on_soft == 'n' or can_dealer_hit_on_soft == 'N':
+	can_dealer_hit_on_soft = False
+else:
+	can_dealer_hit_on_soft = True
+
 bankroll_value_list = []
 
 for player in range(num_of_player):
@@ -36,18 +43,18 @@ num_of_streak = int(input("Enter number of streak: "))
 for i in range(num_of_streak):
 	print(f"################## Streak {i} ######################")
  
-	b = Blackjack(min_bet_for_game,num_of_deck, num_of_deck_before_s,bankroll_value_list,num_of_player,game_type)
+	b = BlackJack(min_bet_for_game,num_of_deck, num_of_deck_before_s, can_dealer_hit_on_soft,bankroll_value_list,num_of_player,game_type)
 
 	max_tc,max_tc_round = b.play_n_rounds(num_of_rounds)
 
 	print(f"Maximum True Count is {max_tc} for round {max_tc_round}")
 
 
-	for player in b.player_list:
-		plt.plot(player.bankroll_value_list)
+	# for player in b.player_list:
+	# 	plt.plot(player.bankroll_value_list)
 
 
-plt.xlabel("Number of Rounds")
-plt.ylabel("Bankroll Value")
+# plt.xlabel("Number of Rounds")
+# plt.ylabel("Bankroll Value")
 
-plt.show()
+# plt.show()
