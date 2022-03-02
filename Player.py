@@ -4,7 +4,15 @@ import copy
 
 
 class Player:
-    def __init__(self, is_dealer, deck, player_index=-1, current_game=None, bankroll_value=None, min_bet=None):
+    def __init__(
+        self,
+        is_dealer,
+        deck,
+        player_index=-1,
+        current_game=None,
+        bankroll_value=None,
+        min_bet=None,
+    ):
         self.game = current_game
         self.bankroll = bankroll_value
         self.min_bet = min_bet
@@ -32,14 +40,14 @@ class Player:
 
     def update_bet(self):
         true_count = self.deck.count_card.true_count
-        if(true_count <= 1.5):
+        if true_count <= 1.5:
             self.current_bet = self.min_bet
-        elif(1.5 < true_count <= 2.5):
-            self.current_bet = 2*self.min_bet
-        elif(2.5 < true_count <= 3.5):
-            self.current_bet = 4*self.min_bet
-        elif(true_count > 3.5):
-            self.current_bet = 8*self.min_bet
+        elif 1.5 < true_count <= 2.5:
+            self.current_bet = 2 * self.min_bet
+        elif 2.5 < true_count <= 3.5:
+            self.current_bet = 4 * self.min_bet
+        elif true_count > 3.5:
+            self.current_bet = 8 * self.min_bet
 
     def deal(self):
         self.cards.extend(self.deck.draw_card(2))
@@ -64,7 +72,7 @@ class Player:
 
     def double_down(self):
         if self.can_dd:
-            self.current_bet = 2*self.current_bet
+            self.current_bet = 2 * self.current_bet
             print(f"Bet After Doubling Down is {self.current_bet}")
             bust_value = self.hit()
             self.can_hit = False
@@ -90,13 +98,13 @@ class Player:
 
         player_copy.is_derivate = True
 
-        player_copy.player_index += '.1'
-        self.player_index += '.2'
+        player_copy.player_index += ".1"
+        self.player_index += ".2"
 
         parent_bust = self.hit()
         player_copy.hit()
 
-        if player_copy.cards[0].value == 'A':
+        if player_copy.cards[0].value == "A":
             self.can_hit = False
             player_copy.can_hit = False
 
@@ -118,7 +126,7 @@ class Player:
             if self.reveal_cards == True:
                 for card in self.cards:
                     print(card.value)
-                print("Score: ",self.score)
+                print("Score: ", self.score)
                 return
 
             print(self.cards[0].value)
@@ -138,7 +146,7 @@ class Player:
         ace_counter = 0
         score = 0
         for card in self.cards:
-            if card.value == 'A':
+            if card.value == "A":
                 ace_counter = ace_counter + 1  # ace_counter += 1
             score += card.price
 
@@ -154,7 +162,7 @@ class Player:
         if self.is_derivate:
             p = self.parent
 
-        p.bankroll += (factor * self.current_bet)
+        p.bankroll += factor * self.current_bet
         print("Bankroll_value", self.player_index, p.bankroll)
 
 
