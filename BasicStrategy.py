@@ -68,7 +68,7 @@ class BasicStrategy:
             return self.choose_from_pair_cards(
                 player_pair_value, dealer_card, player_card, num_of_p_cards
             )
-        elif is_soft and player_card < 11:
+        elif is_soft and num_of_p_cards == 2:
             return self.choose_from_soft_cards(player_card, dealer_card, num_of_p_cards)
         else:
             return self.choose_from_hard_cards(player_card, dealer_card, num_of_p_cards)
@@ -82,7 +82,7 @@ class BasicStrategy:
 
     def choose_from_soft_cards(self, p_c, d_c, num_of_p_cards):
         while p_c > 11:
-            p_c -= 10
+            p_c -= 11
         choice = self.soft_card[p_c][d_c]
         if choice == "DH" or choice == "DS":
             if num_of_p_cards == 2:

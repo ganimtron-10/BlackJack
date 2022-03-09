@@ -37,7 +37,7 @@ class BlackJack:
         max_true_count = -10000000
         max_tc_round = 0
         for i in range(num_of_rounds):
-            print(f"################## Round {i+1} ######################")
+            print(f"#################### Round {i+1} ####################")
             current_tc = self.play_round()
 
             if current_tc > max_true_count:
@@ -326,3 +326,10 @@ class BlackJack:
                 if choice == "I":
                     print(f"Player {current_player.player_index} took Insurance!")
                     current_player.has_insurance = True
+
+
+if __name__ == "__main__":
+    b = BlackJack(
+        25, 6, 1.5, False, [1000, 1000, 1000], num_of_players=3, basic_strategy=False
+    )
+    b.play_n_rounds(100)

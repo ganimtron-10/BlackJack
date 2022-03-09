@@ -37,26 +37,25 @@ for player in range(num_of_player):
 
 num_of_streak = int(input("Enter number of streak: "))
 
+b = BlackJack(
+    min_bet_for_game,
+    num_of_deck,
+    num_of_deck_before_s,
+    can_dealer_hit_on_soft,
+    bankroll_value_list,
+    num_of_player,
+    game_type,
+)
 
 for i in range(num_of_streak):
     print(f"################## Streak {i} ######################")
-
-    b = BlackJack(
-        min_bet_for_game,
-        num_of_deck,
-        num_of_deck_before_s,
-        can_dealer_hit_on_soft,
-        bankroll_value_list,
-        num_of_player,
-        game_type,
-    )
 
     max_tc, max_tc_round = b.play_n_rounds(num_of_rounds)
 
     print(f"Maximum True Count is {max_tc} for round {max_tc_round}")
 
-    # for player in b.player_list:
-    # 	plt.plot(player.bankroll_value_list)
+#     for player in b.player_list:
+#       plt.plot(player.bankroll_value_list)
 
 
 # plt.xlabel("Number of Rounds")

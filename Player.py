@@ -147,11 +147,11 @@ class Player:
         score = 0
         for card in self.cards:
             if card.value == "A":
+                self.is_soft = True
                 ace_counter = ace_counter + 1  # ace_counter += 1
             score += card.price
 
         while ace_counter > 0 and score > 21:
-            self.is_soft = True
             score -= 10
             ace_counter -= 1
 
@@ -164,19 +164,3 @@ class Player:
 
         p.bankroll += factor * self.current_bet
         print("Bankroll_value", self.player_index, p.bankroll)
-
-
-if __name__ == "__main__":
-    d = Player(is_dealer=False, deck=Deck(), player_index=1, current_game=None)
-    d.deal()
-    d.show_cards()
-    print()
-    # print("score: ",d.score)
-    d.reveal_cards = True
-    d.show_cards()
-
-    print()
-    d.hit()
-    d.show_cards()
-    # print("Score: ",d.score)
-    print()

@@ -12,7 +12,7 @@ class Deck:
         self.generate_cards()
 
     def generate_cards(self):
-        print("######################## Shuffling Cards!! #########################")
+        print(" Shuffling Cards!! ".center(40, "#"))
         self.count_card.reset()
         for nod in range(self.num_of_deck):
             for i in range(1, 14):
